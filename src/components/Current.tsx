@@ -1,9 +1,9 @@
-import axios from "axios";
-import { useState, useEffect } from "react";
+import axios from 'axios'
+import { useState, useEffect } from 'react'
 
 type bitType = {
     time: {
-        update: string,
+        updated: string,
         updatedISO: string,
         updateduk: string
     },
@@ -24,51 +24,53 @@ type bitType = {
     }
 }
 
-const Cureent = () => {
+const Current = () => {
     const [task, setTask] = useState<bitType | null>(null)
     const [loading, setLoading] = useState(true)
     const [err, setErr] = useState(false)
 
     const fetchAPI = async () => {
-        try{
+        try {
             const resp = await axios.get<bitType>('https://api.coindesk.com/v1/bpi/currentprice/thb.json')
             setTask(resp.data)
             setLoading(false)
+            setErr(false)
+        }
+        catch {
+            setLoading(false)
             setErr(true)
         }
-            catch{
-                setLoading(false)
-                setErr(true)
-            }
-        }
+    }
+
     useEffect(() => {
         fetchAPI()
-    },[])
+    }, [])
 
     const render = () => {
-        if(loading){
+        if (loading) {
             return (
-                <p className = 'text-2xl'>Loading ...</p>
+                <p className='text-2xl'>Loading ...</p>
             )
         }
-        else if(err){
+        else if (err) {
             return (
-                <p className = 'text-xl text-red-500'>here was an error. Please try again later.</p>
+                <p className='text-xl text-red-500'>There was an error. Please try again later.</p>
             )
         }
         else {
             return (
-                <div className = 'space-y-3'>
-                    <p className = 'text-2xl'>{task?.bpi.THB.rate_float.toLocaleString()} THB</p>
-                    <p>(Last updated {task?.time.update})</p>
+                <div className='space-y-3'>
+                    <p className='text-2xl'>{task?.bpi.THB.rate_float.toLocaleString()} THB</p>
+                    <p> (Last updated {task?.time.updated}) </p>
                 </div>
             )
         }
     }
+
     return (
-        <div className = 'my-5'>
-            <div className = 'text-center space-y-3'>
-                <p className = 'text-2xl font-semibold'>Current price</p>
+        <div className='my-5'>
+            <div className='text-center space-y-3'>
+                <p className='text-2xl font-semibold '>Current price</p>
                 {render()}
             </div>
         </div>
@@ -76,4 +78,4 @@ const Cureent = () => {
 
 }
 
-export default Cureent
+export default Current
