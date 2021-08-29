@@ -27,12 +27,12 @@ type bitType = {
 const Cureent = () => {
     const [task, setTask] = useState<bitType | null>(null)
     const [loading, setLoading] = useState(true)
-    const [err, setErr] = useState()
+    const [err, setErr] = useState(false)
 
     const fetchAPI = async () => {
         try{
             const resp = await axios.get<bitType>('https://api.coindesk.com/v1/bpi/currentprice/thb.json')
-            setTask(resp,data)
+            setTask(resp.data)
             setLoading(false)
             setErr(true)
         }
